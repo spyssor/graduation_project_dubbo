@@ -1,3 +1,6 @@
+# 毕业设计：基于Dubbo的院线平台系统
+此次毕业设计使用Guns+SpringBoot+Dubbo打造一个微服务院线平台系统。
+
 # Guns V5.0
 
 ## 介绍
