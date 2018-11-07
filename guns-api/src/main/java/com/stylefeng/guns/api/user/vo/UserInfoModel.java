@@ -1,4 +1,4 @@
-package com.stylefeng.guns.api;
+package com.stylefeng.guns.api.user.vo;
 
 import java.io.Serializable;
 

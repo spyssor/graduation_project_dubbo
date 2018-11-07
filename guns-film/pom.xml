@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.stylefeng.guns</groupId>
-    <artifactId>guns-gateway</artifactId>
+    <artifactId>guns-film</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
 
-    <name>guns-gateway</name>
-    <description>院线平台网关</description>
+    <name>guns-film</name>
+    <description>院线平台的影片服务</description>
 
     <parent>
         <groupId>com.stylefeng</groupId>
@@ -19,10 +19,6 @@
     </parent>
 
     <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
