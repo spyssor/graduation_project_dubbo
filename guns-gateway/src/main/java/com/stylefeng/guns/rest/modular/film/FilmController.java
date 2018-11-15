@@ -22,7 +22,7 @@ public class FilmController {
 
     private static final String IMG_PRE = "http://img.meetingshop.cn/";
 
-    @Reference(interfaceClass = FilmServiceApi.class)
+    @Reference(interfaceClass = FilmServiceApi.class, check = false)
     private FilmServiceApi filmServiceApi;
 
     @Reference(interfaceClass = FilmAsyncServiceApi.class, async = true)
