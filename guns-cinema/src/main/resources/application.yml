@@ -48,5 +48,5 @@ logging:
   level.root: info
   level.com.stylefeng: debug
   path: logs/
-  file: guns-film.log
+  file: guns-cinema.log
 
