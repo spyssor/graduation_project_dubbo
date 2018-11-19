@@ -11,7 +11,7 @@ public class OrderVO implements Serializable {
     private String orderId;
     private String filmName;
     private String fieldTime;
-    private String cinemaTime;
+    private String cinemaName;
     private String seatsName;
     private String orderPrice;
     private String orderTimestamp;
