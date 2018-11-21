@@ -35,6 +35,7 @@ public class OrderController {
     )
     private OrderServiceApi orderServiceApi2017;
 
+    //熔断后返回信息的方法
     public ResponseVO error(Integer fieldId, String soldSeats, String seatsName){
 
         return ResponseVO.serviceFail("抱歉，下单的人过多，请稍后重试");
@@ -42,6 +43,11 @@ public class OrderController {
 
     //购票
     //熔断器Hystrix
+    /*
+        信号量隔离
+        线程池隔离
+        线程切换
+     */
     @HystrixCommand(fallbackMethod = "error", commandProperties = {
             @HystrixProperty(name="execution.isolation.strategy", value = "THREAD"),
             @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "4000"),
@@ -58,37 +64,32 @@ public class OrderController {
     @RequestMapping(value = "buyTickets", method = RequestMethod.POST)
     public ResponseVO buyTickets(Integer fieldId, String soldSeats, String seatsName){
 
-        try {
-            if(tokenBucket.getToken()){
-                //验证售出的票是否为真
-                boolean isTrue = orderServiceApi.isTrueSeats(fieldId+"", soldSeats);
+        if(tokenBucket.getToken()){
+            //验证售出的票是否为真
+            boolean isTrue = orderServiceApi.isTrueSeats(fieldId+"", soldSeats);
 
-                //已经销售的座位里，有没有这些座位
-                boolean isNotSold = orderServiceApi.isNotSoldSeats(fieldId+"", soldSeats);
+            //已经销售的座位里，有没有这些座位
+            boolean isNotSold = orderServiceApi.isNotSoldSeats(fieldId+"", soldSeats);
 
-                //验证，上述两个内容有一个不为真，则不创建订单
-                if (isTrue && isNotSold){
-                    //创建订单信息,注意获取登陆人
-                    String userId = CurrentUser.getCurrentUser();
-                    if (userId == null || userId.trim().length() == 0){
-                        return ResponseVO.serviceFail("用户未登录");
-                    }
-                    OrderVO orderVO = orderServiceApi.saveOrderInfo(fieldId, soldSeats, seatsName, Integer.parseInt(userId));
-                    if (orderVO == null){
-                        log.error("购票未成功");
-                        return ResponseVO.serviceFail("购票未成功");
-                    }else{
-                        return ResponseVO.success(orderVO);
-                    }
+            //验证，上述两个内容有一个不为真，则不创建订单
+            if (isTrue && isNotSold){
+                //创建订单信息,注意获取登陆人
+                String userId = CurrentUser.getCurrentUser();
+                if (userId == null || userId.trim().length() == 0){
+                    return ResponseVO.serviceFail("用户未登录");
+                }
+                OrderVO orderVO = orderServiceApi.saveOrderInfo(fieldId, soldSeats, seatsName, Integer.parseInt(userId));
+                if (orderVO == null){
+                    log.error("购票未成功");
+                    return ResponseVO.serviceFail("购票未成功");
                 }else{
-                    return ResponseVO.serviceFail("订单中的座位编号有问题");
+                    return ResponseVO.success(orderVO);
                 }
             }else{
-                return ResponseVO.serviceFail("购票人数过多，请稍后再试");
+                return ResponseVO.serviceFail("订单中的座位编号有问题");
             }
-        }catch (Exception e){
-            log.error("购票业务异常", e);
-            return ResponseVO.serviceFail("购票业务异常");
+        }else{
+            return ResponseVO.serviceFail("购票人数过多，请稍后再试");
         }
     }
 

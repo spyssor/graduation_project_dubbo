@@ -1,6 +1,7 @@
 package com.stylefeng.guns.core.util;
 
 // 因为令牌桶对业务有一定的容忍度，相比漏桶法好一些
+// 此处是一个请求给一个令牌，属于相对简单的令牌桶的实现，真正业务中是根据业务字节数赋予令牌
 public class TokenBucket {
 
     private int bucketNums=100;              // 桶的容量

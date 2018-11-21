@@ -3,7 +3,8 @@ package com.stylefeng.guns.rest.common;
 public class CurrentUser {
 
     //线程绑定的存储空间
-    private static final ThreadLocal<String> threadLocal = new ThreadLocal<>();
+    //InheritableThreadLocal相比ThreadLocal来说在线程切换后会将之前的线程绑定信息保存下来
+    private static final InheritableThreadLocal<String> threadLocal = new InheritableThreadLocal<>();
 
     public static void saveUserInfo(String userId){
 
